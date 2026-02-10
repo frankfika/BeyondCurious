@@ -1,0 +1,69 @@
+version: 1
+name: BeyondCurious
+purpose: 对外分享 AI 的基地（读者资料、课程专辑、文章笔记、工具箱与示例）
+
+conventions:
+  repo-language: zh-CN
+  path-style: numbered-chinese
+  filenames:
+    date-prefix: "YYYY-MM-DD-"
+    topic-prefix: "topic-"
+  content:
+    keep-source-first: true
+    prefer-reproducible: true
+    no-secrets: true
+
+sections:
+  - id: readers
+    title: 读者资料
+    path: 01-读者资料/
+    description: 给你书的读者使用的参考资料与下载内容
+    suggested-layout:
+      - "配套资料/"
+      - "勘误/"
+      - "下载/"
+
+  - id: courses
+    title: 课程与专辑
+    path: 02-课程与专辑/
+    description: 成体系的教程内容（课程/专辑/训练营等）
+    suggested-layout:
+      - "课程/<course-name>/"
+      - "专辑/<series-name>/"
+
+  - id: writing
+    title: 文章与笔记
+    path: 03-文章与笔记/
+    description: 文章类内容与日常积累（对外可分享/对内可复盘）
+    suggested-layout:
+      - "文章/YYYY-MM-DD-标题/"
+      - "笔记/YYYY-MM-DD-主题/"
+
+  - id: toolbox
+    title: AI工具箱
+    path: 04-AI工具箱/
+    description: 让 AI 能“接工具/跑流程”的素材与配置（面向复用与分享）
+    suggested-layout:
+      - "MCP插件/<tool-name>/"
+      - "Skills技能/<skill-name>/"
+      - "提示词与工作流/<topic>/"
+
+  - id: examples
+    title: 示例项目
+    path: 05-示例项目/
+    description: 可以直接运行/演示的最小例子（便于读者/学员照着操作）
+    suggested-layout:
+      - "最小示例/<example-name>/"
+
+  - id: media
+    title: 图片与课件
+    path: 06-图片与课件/
+    description: 会被反复引用的素材（图片、图表、课件、下载物等）
+    suggested-layout:
+      - "图片/"
+      - "课件/"
+
+  - id: automation
+    title: 自动化
+    path: 99-自动化/
+    description: 脚本与自动化工具（可选）
