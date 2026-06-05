@@ -1,0 +1,58 @@
+name: 瓶颈猎手 · 每日自进化循环
+
+on:
+  schedule:
+    # 工作日 07:30 ET ≈ UTC 11:30 / 12:30
+    - cron: "30 11 * * 1-5"
+    - cron: "30 12 * * 1-5"
+  workflow_dispatch:
+    inputs:
+      portfolio:
+        description: "当前持仓"
+        required: false
+        default: ""
+      macro_note:
+        description: "今日宏观备注"
+        required: false
+        default: ""
+
+jobs:
+  loop:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: claude/stock-screener-social-analysis-rg81C
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install deps
+        run: pip install -r scripts/requirements.txt
+
+      - name: Run 4-phase self-evolving loop
+        env:
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+          DEEPSEEK_MODEL: ${{ vars.DEEPSEEK_MODEL || 'deepseek-chat' }}
+          DEEPSEEK_MODEL_CRITIC: ${{ vars.DEEPSEEK_MODEL_CRITIC || 'deepseek-reasoner' }}
+          PORTFOLIO: ${{ inputs.portfolio }}
+          MACRO_NOTE: ${{ inputs.macro_note }}
+        run: python scripts/run_scan.py loop
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "04-AI工具箱/提示词与工作流/瓶颈猎手-美股每日进化系统/07-每日复盘归档/" \
+                  "04-AI工具箱/提示词与工作流/瓶颈猎手-美股每日进化系统/08-知识沉淀/"
+          if git diff --cached --quiet; then
+            echo "nothing to commit"
+            exit 0
+          fi
+          DATE=$(date -u +"%Y-%m-%d")
+          git commit -m "loop: 自进化循环 ${DATE} (A 复盘 + B 蒸馏 + C 扫描 + D 自审)"
+          git push
